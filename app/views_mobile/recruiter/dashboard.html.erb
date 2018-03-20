@@ -1,0 +1,77 @@
+<% content_for :page_title do %>
+Employer Dashboard
+<% end %>
+<section>
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="inner_form">
+          <div class="accordion">
+              <div class="dashboard">
+                <a href=""><p>Registered Job Fairs</p></a>
+                <div class="default">
+                    <% if not @registrations.empty? %>
+                    <ul>
+                      <% @registrations.each do |registration| %>
+                          <li>
+                            <span><%= link_to "<b>#{relative_date(registration.jobfair.date)}</b> #{registration.jobfair.location}".html_safe, jobfair_path(registration.jobfair.id), :class=>'left' %></span>
+                          </li>
+                      <% end %>
+                    </ul>
+                    <% else %>
+                          <span>No Records found</span>
+                    <% end %>
+                </div>
+              </div>
+			
+              <div class="dashboard">
+                    <a href=""><p>Recent Messages</p></a>
+                    <div>
+                    <%= render :partial => "/messages/list.html.erb", :locals => {:messages => @messages_inbox} %>
+                    </div>
+              </div>
+			
+              <%#*<div class="dashboard">%>
+                      <%#*<a href=""><p>Recent Job Inquiries</p></a>%>
+                      <%#*<div>%>
+                      <%# if not @applications.empty? %>
+                      <%#*<ul>%>
+                        <%# @applications.each do |application| %>
+                        <%# unless application.job.to_s.blank? %>
+                          <%#*<li>%>
+                              <%#=  link_to "<b>#{relative_date(application.created_at).capitalize}</b> #{application.job.title}".html_safe, job_path(application.job.id) %>
+                          <%#*</li>%>
+                        <%# end %>
+                        <%# end %>
+                      <%#*</ul>%>
+                      <%# else %>
+                        <%#*<span>No Records found</span>%>
+                      <%# end %>
+                      <%#*</div>%>
+              <%#*</div>%>
+			
+              <div class="dashboard">
+                <a href=""><p>Saved Resumes</p></a>
+                <div>
+                  <% unless current_user.inbox_entries.empty? || @applicants.to_s.blank?  %>
+                      <ul>
+                        <% @resumes_inbox.each do |entry| %>
+                        <% if entry.resource %>
+                          <li id="inbox_entry_<%=entry.id%>">
+                            <%= link_to entry.resource.applicant.name, applicant_path(entry.resource.applicant.id), :class=>'left' %>
+                            <%= link_to "Remove", remove_from_inbox_resume_path(entry.resource.id), :class => "inbox-handler", :remote => true %>
+                          </li>
+                        <% end %>
+                        <% end %>
+                      </ul>
+                  <% else %>
+                    <span>No Records found</span>
+                  <% end %>
+                </div>
+              </div>
+          </div>	
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,28 @@
+<% content_for :page_title do %>
+  <%= @job.title -%>
+<% end %>
+<section>
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="inner_form">
+            <% content_for :title do %>
+              <%= @job.title %>
+            <% end %>
+            <div class="sub-menu-link">
+              <% if current_user.is_a?(Recruiter) %>
+                <% if @job.expired? %><%= link_to "Re Post", repost_job_path(@job.id) -%>&nbsp;|&nbsp;<% end %>
+                <%= link_to "Edit", edit_job_path(@job.id) -%>&nbsp;|&nbsp;
+                <%= link_to "Delete", job_path(@job.id), :method => :delete %>&nbsp;|&nbsp;
+                <%= link_to "New", new_job_path -%>&nbsp;|&nbsp;
+                <%= link_to "View All", jobs_path -%>
+              <% elsif current_user.is_a?(Applicant) %>
+                <h3><%= @job.company_name || @job.recruiter.employer.name %> | <%= "#{@job.location.city}, #{@job.location.state}" %></h3>
+              <% end %>
+            </div>
+            <%= render :partial => 'show', :locals => {:display_title => false} %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

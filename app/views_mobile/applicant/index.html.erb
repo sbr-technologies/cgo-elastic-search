@@ -1,0 +1,79 @@
+<% content_for :page_title do %>
+Applicant Dashboard
+<% end %>
+<section>
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="inner_form">
+          <div class="accordion">
+              <div class="dashboard">
+                <a href=""><p>Registered Job Fairs</p></a>
+                <div class="default">
+                    <% if not @registrations.empty? %>
+                    <ul>
+                      <% @registrations.each do |registration| %>
+                          <li>
+                            <span>
+                              <%= link_to "<b>#{relative_date(registration.jobfair.date)}</b> #{registration.jobfair.location}".html_safe, jobfair_path(registration.jobfair.id), :class=>'left' %>
+                              <%= link_to "View Form", jobfair_registration_path(:jobfair_id => registration.jobfair.id, :id => registration.id), :popup => true, :class=>'right right-link' -%>
+                            </span>
+                          </li>
+                      <% end %>
+                    </ul>
+                    <% else %>
+                          <span>No Records found</span>
+                    <% end %>
+                </div>
+              </div>
+			
+              <div class="dashboard">
+                    <a href=""><p>Recent Messages</p></a>
+                    <div>
+                    <%= render :partial => "/messages/list.html.erb", :locals => {:messages => @messages_inbox} %>
+                    <%= link_to("View All", messages_path, :class=>"action_link") unless @messages_inbox.empty? %>
+                    </div>
+              </div>
+			
+              <div class="dashboard">
+                      <a href=""><p>Recent Job Inquiries</p></a>
+                      <div>
+                      <% if not @applications.empty? %>
+                      <ul>
+                        <% @applications.each do |application| %>
+                        <% unless application.job.to_s.blank? %>
+                          <li>
+                              <%=  link_to "#{relative_date(application.created_at).capitalize} #{application.job.title}", job_path(application.job.id), :class=>'left' %>
+                          </li>
+                        <% end %>
+                        <% end %>
+                      </ul>
+                      <% else %>
+                        <span>No Records found</span>
+                      <% end %>
+                      </div>
+              </div>
+			
+              <div class="dashboard">
+                <a href=""><p>Saved Jobs<span class="ajax_loader"><%=image_tag "/images/dots.gif"-%></span></p></a>
+                <div>
+                  <% if not @inbox.empty? %>
+                      <ul>
+                        <% @inbox.each do |inbox_entry| %>
+                          <li id="inbox_entry_<%=  inbox_entry.id%>">
+                            <%= link_to truncate(inbox_entry.resource.title, :length => 45), job_path(inbox_entry.resource.id), :class=>'left' %>
+                            <%= link_to "Remove", remove_from_inbox_job_path(inbox_entry.resource.id), :confirm => 'Are you sure?', :remote => true, :class=>'right right-link' %>
+                          </li>
+                          <% end %>
+                      </ul>
+                  <% else %>
+                    <span>No Records found</span>
+                  <% end %>
+                </div>
+              </div>
+          </div>	
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

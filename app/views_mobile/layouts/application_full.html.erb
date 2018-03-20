@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <%= stylesheet_link_tag 'style.mob','bootstrap-switch.min.mob','bootstrap-select.min.mob' %>
+  
+  <%= javascript_include_tag 'jquery.mob','jquery_ujs.mob','bootstrap.mob','bootstrap-switch.min.mob','bootstrap-select.min.mob','application.mob' %>
+  
+  <%= csrf_meta_tag %>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name='keywords' content="<%= (!yield(:meta_keywords).empty? ? yield(:meta_keywords) : 'Military Job Fairs, Jobs for Military, Civilian Careers, Military Placement, Defense Jobs, Military Friendly Employers, Employers, Job Descriptions, Military Resumes, Job Seekers, Hire Military, Military Personnel, Corporate Gray Series Books, military-to-civilian, Military Transitioning, Hire Employees, Search Military Resumes').gsub(/\n/, '').strip %>" />
+  <meta name="description" content="<%= (!yield(:meta_description).empty? ? yield(:meta_description) : 'We link employers with transitioning and former military personnel through our Corporate Gray Series of military-to-civilian career transition books, Corporate Gray Job Fairs, and Corporate Gray Online.').gsub(/\n/, '').strip %>" />
+  <meta name="author" content="Corporate Gray Online, Copyright 2004-<%=Date.today.year%>"/>
+
+  <title><%= (!yield(:page_title).empty? ? yield(:page_title) + ' || Corporate Gray' :'Corporate Gray Military to Civilian Career Transition Website') %></title>
+  <!--================================================== -->
+  <!--<link rel="shortcut icon" href="images/favicon.ico">-->
+  <%= favicon_link_tag 'favicon.ico' %>
+</head>
+<body>
+<%= render 'layouts/header' %>
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12">
+      <% if flash[:notice] || flash[:error]%>
+      <div class="notify notify-info">
+       <a class="close" href="javascript:void(0);">X</a>
+      <% if flash[:notice] %>
+      <span class="notice"><%= flash[:notice]%> </span>
+      <% elsif flash[:error]%>
+      <span class="error"><%= flash[:error]%> </span>
+      <% end %>
+      </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+<%= yield %>
+<%= render 'layouts/footer' %>
+</body>
+</html>

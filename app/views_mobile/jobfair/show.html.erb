@@ -1,0 +1,59 @@
+<% content_for :page_title do %>
+  <%= @jobfair.category.titleize %> Job Fair
+<% end %>
+  
+<% if !current_user || current_user.is_a?(Applicant) %>
+  <%= content_for :meta_description do %>
+    Corporate Gray job fairs connect military veterans in career transition with military friendly employers and schools.
+  <% end %>
+<% else %>
+  <%= content_for :meta_description do %>
+    Corporate Gray Job Fairs enable recruiters to screen and evaluate military veterans for company employment.
+  <% end %>
+<% end %>
+<section>
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="inner_form">
+          <div class="title">
+              <%= @jobfair.category.titleize %> Job Fair
+          </div>
+          <div class="name-area"><label>Audience:</label><%= @jobfair.category.titleize %></div>
+          <div class="name-area"><label>Sponsor:</label><%= Jobfair::SPONSORS[@jobfair.sponsor.to_sym] %></div>
+          <div class="name-area"><label>Date:</label><%= @jobfair.date.to_s(:human_long) %></div>
+          <div class="name-area"><label>Time:</label><%= "#{@jobfair.start_time} - #{@jobfair.end_time}"%></div>
+          <% if current_user.is_a?(Recruiter) %>
+            <div class="name-area"><label>Fees:</label><%= @jobfair.fees %></div>
+          <% end %>
+          <div class="name-area"><label>Location:</label><%= raw "<a class='external' href='http://#{@jobfair.location_url.gsub(/^http:\/\//, "").downcase}'>#{@jobfair.location.titleize}</a> - #{@jobfair.city}"%></div>
+          <div class="name-area"><label>Recommended Hotel:</label><%= @jobfair.recommended_hotel_url.nil? || @jobfair.recommended_hotel_url.blank? ? @jobfair.recommended_hotel.titleize : "<a class='external' href='http://#{@jobfair.recommended_hotel_url.gsub(/^http:\/\//, "").downcase}'>#{@jobfair.recommended_hotel.titleize}</a>".html_safe %></div>
+          <div class="name-area"><label>Clearance Required?:</label><%= to_yes_no(@jobfair.security_clearance_required?).capitalize %></div>
+
+
+          <%= render :partial => "seminars.html.erb" %>
+
+          <div class="register-button-group">
+            <% if current_user %>
+              <% if !current_user.registered?(@jobfair) %>
+                <% if current_user.is_a?(Recruiter)  %>
+                <%= link_to "Register", @jobfair.external_registration_url.to_s.strip.blank? ? new_jobfair_registration_path(@jobfair.id) : @jobfair.external_registration_url, :class=>'btn btn-primary' %>
+                <% else %>
+                  <% if @jobfair.category == 'military_officer' && (!Constants::TYPE_OF_APPLICANT.select {|x| ['O', 'W'].include?(x[:label][0,1])}.collect {|y| y[:id]}.include?(current_user.type_of_applicant))  %>
+                    <span class="btn btn-default disabled">Officers Only</span>
+                  <% else %>
+                    <%= link_to "Register", @jobfair.applicant_external_registration_url.to_s.strip.blank? ? new_jobfair_registration_path(@jobfair.id) : @jobfair.applicant_external_registration_url, :class=>'btn btn-primary' -%>
+                  <% end %>
+                <% end %>
+              <% else %>
+                <span class="btn btn-default disabled">Already Registered</span>
+              <% end %>
+             <% else %>
+              <%= link_to "Login to Register", @jobfair.applicant_external_registration_url.to_s.strip.blank? ? new_jobfair_registration_path(@jobfair.id) : @jobfair.applicant_external_registration_url, :class=>'btn btn-primary' -%>
+          <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

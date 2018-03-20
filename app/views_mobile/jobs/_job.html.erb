@@ -1,0 +1,9 @@
+<li class="job" >
+  <%= link_to  current_user ? job_path(job) : public_profile_job_path(job.code.gsub('/', '#2F#')) do%>
+  <div id='job_<%= job.id -%>' data-company='<%=job.employer.ticker_symbol || job.company_name %>'>
+    <div class="job-title"><%= job.title %></div>
+    <div class="employer-location"><%=job.company_name || job.employer.name%> / <%="#{job.location.city}, #{job.location.state}"%></div>
+  </div>
+  <% end %>
+</li>
+

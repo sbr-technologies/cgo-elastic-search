@@ -1,0 +1,115 @@
+<section>
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="inner_form">
+          <h1>Corporate Gray Job Fair</h1>
+          <h2>Registration Form</h2>
+          <p><%= "#{@registration.jobfair.city} -- #{@registration.jobfair.date.to_s(:human_long)}" %></p>
+          <div class="name-area print-form">
+            <p><label>First Name:</label><%= @registration.attendant.first_name -%></p>
+            <p><label>M.I:</label>____</p>
+            <p><label>Last Name:</label><%= @registration.attendant.last_name -%></p>
+            <p><label>Street Address:</label><%= @registration.attendant.addresses[:primary].street_address1 -%></p>
+            <p><label>City:</label><%= @registration.attendant.addresses[:primary].city -%></p>
+            <p><label>St:</label><%= @registration.attendant.addresses[:primary].state -%></p>
+            <p><label>Zip:</label><%= @registration.attendant.addresses[:primary].zip -%></p>
+            <p><label>E-mail Address:</label><%= @registration.attendant.email -%></p>
+
+            <% if !@registration.attendant.type_of_applicant().nil? %>
+              <p><label>Rank:</label><%= to_label(@registration.attendant.type_of_applicant, Constants::TYPE_OF_APPLICANT) -%></p>
+            <% else %>
+              <p>
+                <label>Rank:</label> <span>O-1</span> <span>O-2</span> <span>O-3</span> <span>O-4</span> <span>O-5</span> <span>O-6</span> <span>O-7</span> <span>O-8</span> <span>O-9</span> <span>O-10</span>
+                <span></span> <span>W-1</span> <span>W-2</span> <span>W-3</span> <span>W-4</span> <span>W-5</span> 
+                <span></span> <span>E-1</span> <span>E-2</span> <span>E-3</span> <span>E-4</span> <span>E-5</span> <span>E-6</span> <span>E-7</span> <span>E-8</span> <span>E-9</span> <span></span> <span>Civilian</span> 
+                <span>(Circle highest rank ever held)</span>
+              </p>
+            <% end %>
+
+            <% if !@registration.attendant.branch_of_service.nil?  %>
+              <p><label>Branch Of Service:</label><%= "#{@registration.attendant.branch_of_service} -- #{to_label(@registration.attendant.branch_of_service, Constants::BRANCH_OF_SERVICE)}" -%></p>
+            <% else %>
+              <p><label>Branch of Service:</label><span>Army</span> <span>Army Reserve</span> <span>Army National Guard</span>
+                <span></span> <span>Navy</span> <span>Navy Reserve</span>
+                <span></span> <span>Marine Corps</span> <span>Marine Corps Reserve</span>
+                <span></span> <span>Air Force</span> <span>Air Force Reserve</span> <span>Air National Guard</span>
+                <span></span> <span>Cost Guard</span> <span>Cost Guard Reserve</span>
+                <span>(circle your current or final branch of service)</span> <span>Not Applicable</span>
+              </p>
+            <% end %>
+
+            <% if !@registration.attendant.security_clearance.nil? %>
+              <p><label>Security Clearance:</label><%= to_label(@registration.attendant.security_clearance, Constants::SECURITY_CLEARANCE) -%></p>
+            <% else %>
+              <p>
+                <label>Security Clearance:</label> <span>Secret</span> <span>Top Secret or Higher</span> <span>None</span>
+                <span></span><span>(circle security clearance level if held within the past 2 years)</span>
+              </p>
+            <% end %>
+
+            <% if !@registration.attendant.education_level.nil? %>
+              <p><label>Education Level:</label><%= "#{@registration.attendant.education_level} -- #{to_label(@registration.attendant.education_level, Constants::EDUCATION_LEVEL)}" -%></p>
+            <% else %>
+              <p>
+                <label>Education Level:</label> <span>High School</span> <span>Associate Degree</span> <span>Associate Degree or Higher</span>
+                <span>(circle highest level attained)</span>
+              </p>
+            <% end %>
+            <p><label>Willing to Relocate:</label><%= to_yes_no(@registration.attendant.willing_to_relocate) -%></p>
+            <p><label>Availability Date:</label>Now or Enter(mm/dd/yyyy):___________</p>
+
+            <p><label>How did you hear about today's event? (circle):</label>
+              <span>Civilian Newspaper</span>
+              <span>Military Newspaper</span> 
+              <span>Military Transition Office</span>
+              <span>State Employment Office</span>
+              <span>Corporate Gray Online</span>
+              <span>Corporate Gray Books</span>
+              <span>MOAA</span>
+              <span>NCOA</span>
+              <span>ROA</span>
+              <span>REA</span>
+              <span>Internet</span>
+              <span>Word of Mouth</span>
+            </p>
+            <p class="title">Job Fair Information</p>
+            <p><label>Location:</label><%= "#{@registration.jobfair.location}, #{@registration.jobfair.city} #{@registration.jobfair.date.to_s(:human_long)} form #{@registration.jobfair.start_time} to #{@registration.jobfair.end_time}" -%></p>
+            <p><label>Recommended Hotel:</label> <%= @registration.jobfair.recommended_hotel -%></p>
+          </div>
+          <% if not @registration.jobfair.seminars.empty? %>
+            <p class="title">Seminars:</p>
+            <div id="jobfair-seminars">
+              <table id="jobfair-calendar-blotter">
+                <tr>
+                  <th>Description</th>
+                  <th>Time</th>
+                  <th>Duration</th>
+                </tr>
+
+                <% @registration.jobfair.seminars.each do |seminar| %>
+                  <tr>
+                    <td><%= seminar.description %></td>
+                    <td><%= seminar.time %></td>
+                    <td><%= seminar.duration %></td>
+                  </tr>
+                <% end %>
+
+              </table>
+            </div>
+          <% end  # if not .... empty? %>
+
+          <div class="name-area"> 
+            <p><label>Dress:</label>
+              Business attire is recommended. If military, duty uniform is fine.
+            </p>
+            <p>
+              <label>Resume:</label>
+              By posting your resume in advance of the job fair, participating employers will have an opportunity to contact you before the event.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

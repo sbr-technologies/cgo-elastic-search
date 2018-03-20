@@ -1,0 +1,7 @@
+<ul class="employer-suggestions">
+  <% @employers.each do |employer| %>
+    <li id='<%="emp-#{employer.id}"%>'><%="#{employer.name}" -%></li>
+  <% end %>
+</ul>
+
+

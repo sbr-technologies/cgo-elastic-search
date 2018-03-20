@@ -1,0 +1,31 @@
+<% content_for :page_title do %>
+<%= @applicant.name %>
+<% end %>
+<section>
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="inner_form">
+          <p class="title">Contact Information:</p>
+            <div class="contact-info">
+              <div><%= @applicant.address.street_address1 -%></div>
+              <%= raw "<div>#{@applicant.address.street_address2}</div>" if not @applicant.address.street_address2.blank? -%>
+              <div><%= "#{@applicant.address.city}, #{@applicant.address.state} #{@applicant.address.zip}" -%></div>
+              <div><%= @applicant.address.phone -%></div>
+              <div><%= link_to @applicant.email, "mailto:#{@applicant.email}" -%></div>
+            </div>
+          <p class="title">Employment Information:</p>
+            <div class="employer-info">
+              <div class="name-area"><label>Rank:</label><%= to_label(@applicant.type_of_applicant, Constants::TYPE_OF_APPLICANT) -%></div>
+              <div class="name-area"><label>Security Clearance:</label><%= to_label(@applicant.security_clearance, Constants::SECURITY_CLEARANCE) -%></div>
+              <div class="name-area"><label>Occupational Preference:</label><%= to_label(@applicant.occupational_preference, Constants::OCCUPATIONAL_PREFERENCE) -%></div>
+              <div class="name-area"><label>Education Level:</label><%= to_label(@applicant.education_level, Constants::EDUCATION_LEVEL) -%></div>
+              <div class="name-area"><label>Branch Of Service:</label><%= to_label(@applicant.branch_of_service, Constants::BRANCH_OF_SERVICE) -%></div>
+              <div class="name-area"><label>Availability Date:</label><%= @applicant.availability_date.nil? ? "Now" : relative_date(@applicant.availability_date) -%></div>
+              <div class="name-area"><label>Willing To Relocate:</label><%= to_yes_no(@applicant.willing_to_relocate).capitalize -%></div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

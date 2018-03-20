@@ -1,0 +1,31 @@
+<%= content_for :page_title do %>
+	Job Seeker Military to Civilian Job Search
+<% end %>
+<%= content_for :meta_keywords do %>
+	military transition assistance, job search, find jobs, veteran employment, security clearance, government jobs, military spouse employment, civilian jobs, military recruitment, military friendly companies
+<% end %>
+<%= content_for :meta_description do %>
+	Corporate Gray military to civilian website helps veterans search for and find civilian jobs.
+<% end %>
+
+<section>
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="inner_form">
+          <% unless @jobs.nil? %>
+          <div class="jobs-count"><%= @jobs.total %> Jobs found for: <%= @keywords.blank? ? @employer_name : "'#{@keywords}' #{!@employer_name.blank? ? 'within ' + @employer_name : ''}"%> <%= "in states: #{@states.join(', ')}" unless @states.join(',').to_s.empty? %></div>
+            <% if !@jobs.nil? && !@jobs.hits.empty? %>
+              <%= render :partial => "blotter", :jobs => @jobs -%>
+              <div>
+                <%= will_paginate @jobs.hits, :previous_label => 'Prev', :next_label => 'Next', :inner_window=>2 ,:outer_window=>1  %>
+              </div>
+          <% end %>
+          <% else %>
+            <%= render :partial => "search_form", :locals => {:q => params[:q] || {} } %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

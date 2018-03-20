@@ -1,0 +1,66 @@
+<!-- Start Content Section ==================================================-->
+<section>
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12">
+        <!-- Content Top Icons Sec -->
+        <div class="content_top_icons">
+          <!-- Content Top Icon Listing -->
+          <div class="col-xs-4">
+            <div class="content_top_icon_list">
+              <%= link_to '<div class="icon_bg"><span class="home_services_icon about_us"></span></div>
+                <span class="content_top_iconTxt">Dashboard</span>'.html_safe, current_user && (current_user.has_role?(:recruiter) || current_user.has_role?(:employer_admin))? dashboard_employer_recruiter_path(:employer_id => current_user.employer.id, :id => current_user.id) : applicants_path %>
+            </div>
+          </div>
+          <!-- Content Top Icon Listing -->
+
+          <!-- Content Top Icon Listing -->
+          <div class="col-xs-4">
+            <div class="content_top_icon_list">
+              <%= link_to '/static/about_us' do  %>
+                <div class="icon_bg"><span class="home_services_icon all_on"></span></div>
+                <span class="content_top_iconTxt">Corporate Gray</span>
+              <% end %>
+            </div>
+          </div>
+          <!-- Content Top Icon Listing -->
+
+          <!-- Content Top Icon Listing -->
+          <div class="col-xs-4">
+            <div class="content_top_icon_list">
+              <% if logged_in? %>
+                <%= link_to '<div class="icon_bg"><span class="home_services_icon dental_implants"></span></div>
+                <span class="content_top_iconTxt">Logout</span>'.html_safe, logout_path %>
+              <% else %>
+                <%= link_to '<div class="icon_bg"><span class="home_services_icon dental_implants"></span></div>
+                <span class="content_top_iconTxt">Login</span>'.html_safe, login_path
+              %>
+              <% end %>
+            </div>
+          </div>
+          <!-- Content Top Icon Listing -->
+
+        </div>
+        <!-- Content Top Icons Sec -->
+
+        <!-- Content Bottom Link Sec -->
+        <div class="content_bottom_links_sec">
+          <ul>
+            <% if logged_in? %>
+            <li><%= link_to '<span class="home_manu_icon why_us"></span> <span>My Account</span>'.html_safe, current_user && current_user.has_role?(:applicant) ? edit_applicant_path(current_user.id) : edit_employer_recruiter_path(:employer_id => current_user.employer.id, :id => current_user.id) %></li>
+            <% else %>
+            <li><%= link_to '<span class="home_manu_icon why_us"></span> <span>Create an Account</span>'.html_safe, new_applicant_path %></li>
+            <% end %>
+            <% if current_user.nil? || current_user.has_role?(:applicant) %>
+            <li><%= link_to '<span class="home_manu_icon benefits"></span> <span>Find Jobs</span>'.html_safe, search_jobs_path %></li>
+            <% end %>
+            <li><%=  link_to '<span class="home_manu_icon finance_options"></span> <span>View Job Fairs</span>'.html_safe, current_user.nil? || current_user.has_role?(:applicant) ? jobfairs_path : '/employers/job_fairs' %></li>
+            <li><%= link_to '<span class="home_manu_icon free_seminar"></span> <span>Career Advice</span>'.html_safe, 'http://blog.corporategray.com' %></li>
+          </ul>
+        </div>
+        <!-- Content Bottom Link Sec -->
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End Content Section ==================================================-->

@@ -1,0 +1,80 @@
+<% if(display_title.nil? || display_title == true) %>
+ <h2><%= @job.title -%></h2>
+<% end %>
+<div id="notification"></div>
+  <%=raw "<div class='name-area'><label>Code:</label>#{@job.code}</div>" if not @job.code.nil? %>
+ <div class="name-area"><label>Location:</label><%= "#{@job.location.city}, #{@job.location.state}" -%></div>
+  <div class="name-area"><label>Company Name:</label><%= @job.company_name || @job.employer.name %></div>
+  
+<div class="name-area"> 
+  <% unless @job.hr_website_url.blank? %>
+    <%= link_to 'Employment Page', @job.hr_website_url.starts_with?("http://") ? @job.hr_website_url : "http://" + @job.hr_website_url, :class=>"action_link", :popup => true unless @job.hr_website_url.nil? || @job.hr_website_url.empty?-%>
+  <% end %>
+  <% if !@job.employer.nil? && !@job.employer.profile.to_s.blank? %>
+      <a href="" class="show-profile">Show Profile</a>
+      <div id="profile" style="display:none"><%=@job.employer.profile -%></div>
+<% end %>
+</div>  
+ 
+  <div class="name-area"><h3>Description:</h3>
+      <% description_text = highlight(@job.description, @keyword , '<em>\1</em>') %>
+      <% if @job.input_method == "manual" %>
+        <%= description_text %>
+      <% else %>
+        <%= raw description_text.gsub(/\n/, "<br/>") %>
+      <% end %>
+ </div>   
+  
+  <% if(!@job.requirements.to_s.blank?) %> 
+      <div class="name-area"><label>Requirements:</label><%= @job.requirements %></div>
+  <%  end %>
+
+  <% unless @job.education_level == "0" %>
+    <div class="name-area"><label>Education Level:</label><%= or_unspecified(to_label(@job.education_level, Constants::EDUCATION_LEVEL).capitalize) %></div>
+  <% end %>
+
+  <% unless @job.payrate.blank? %>
+    <div class="name-area"><label>Pay Rate:</label><%= or_unspecified(to_label(@job.payrate, Constants::PAY_RATE).capitalize) %></div>
+  <% end %>
+
+  <% unless @job.hr_website_url.blank? %>
+    <div class="name-area"><label>HR. Website URL:</label><%= or_unspecified(@job.hr_website_url) %></div>
+  <% end %>
+
+  <% unless @job.security_clearance == "0" %>
+    <div class="name-area"><label>Security Clearance:</label><%= or_unspecified(to_label(@job.security_clearance, Constants::SECURITY_CLEARANCE).capitalize) %></div>
+  <% end %>
+
+  <% unless @job.travel_requirements == "0" %>
+    <div class="name-area"><label>Travel Requirements:</label><%= or_unspecified(to_label(@job.travel_requirements, Constants::TRAVEL_REQUIREMENT).capitalize) %></div>
+  <% end %>
+
+  <% unless @job.relocation_cost_paid.to_s.blank? %>
+    <div class="name-area"><label>Relocation Costs Paid?:</label><%= @job.relocation_cost_paid.gsub(/_/, " ").titleize %></div>
+  <% end %>
+
+  <% unless !current_user || current_user.is_a?(Applicant) %>
+    <div class="name-area"><label>Show Company Profile?:</label><%= to_yes_no(@job.show_company_profile).capitalize %></div>
+  <% end %>
+    <div class="apply-button-group">
+      <% if current_user.is_a?(Applicant) %>
+        <% if(!@job.online_application_url.nil? && !@job.online_application_url.empty?) %>
+           <span class="apply-button"><%=link_to "Apply", @job.online_application_url, :popup => true, :id => "apply_button", :class=>'btn btn-primary' %></span>
+        <% elsif not current_user.applied?(@job) %>
+           <span class="apply-button">
+             <%= form_for :application, :url => apply_applicant_path(current_user.id), :remote => true, :html => {:id =>"applyForm"} do |f| %>
+               <%= f.hidden_field :job_id, :value => @job.id %>
+             <% end %>
+               <a class="btn btn-primary" href="javascript:" onclick="$('#applyForm').submit();">Apply</a>
+           </span>
+        <% else %>
+           <span class="btn btn-default disabled">Already applied</span>
+        <% end %>
+           <% if not current_user.inbox_entries.contains?(@job, "Job")%>
+             <%= link_to "Save", add_to_inbox_job_path(@job.id), :remote => true, :class => "btn btn-primary save-job" %>
+           <% else %>
+             <span class="btn btn-default disabled">Already in your Inbox</span>
+           <% end %>
+      <% end %>
+      <span class="ajax_loader"><%=image_tag "/images/dots.gif"-%></span>
+ </div>

@@ -1,0 +1,73 @@
+<%= fields_for address do |a_form| %>
+	<%= a_form.hidden_field :label -%>
+
+    <div class="control-group">
+      <label class="control-label required" for="address_street_address1">Street Address #1</label>
+      <div class="controls">
+        <%= a_form.text_field :street_address1, :class => "form-control" -%>
+        <%= errors_for @address, :street_address1 %>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="address_street_address2">Street Address #2</label>
+      <div class="controls">
+        <%= a_form.text_field :street_address2, :class => "form-control" -%>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label required" for="address_state">City</label>
+      <div class="controls">
+        <%= a_form.text_field :city, :class => "form-control"-%>
+        <%= errors_for @address, :city %>
+      </div>
+    </div>
+    
+    <div class="control-group">
+      <label class="control-label required" for="address_state">State</label>
+      <div class="controls">
+        <%= a_form.select :state, options_from_hash(Constants::STATE_APO, :include_blank=>true), {}, {:class=>'form-control'} %>
+        <%= errors_for @address, :state %>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label required" for="address_zip">Zip</label>
+      <div class="controls">
+		<%= a_form.text_field :zip, :class=>"form-control"-%>
+        <%= errors_for @address, :zip %>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label required" for="address_country">Country</label>
+      <div class="controls">
+	    <%= a_form.select :country, options_from_hash(Constants::COUNTRIES), {}, {:class=>'form-control'} %>
+            <%= errors_for @address, :country %>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label required" for="address_phone">Phone</label>
+      <div class="controls">
+	    <%= a_form.text_field :phone, :class=>"form-control" -%>
+        <%= errors_for @address, :phone %>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="address_fax">Fax</label>
+      <div class="controls">
+	    <%= a_form.text_field :fax, :class=>"form-control" -%>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="address_mobile">Mobile</label>
+      <div class="controls">
+	    <%= a_form.text_field :mobile, :class=>'form-control'  -%>
+      </div>
+    </div>
+
+<% end %>
+

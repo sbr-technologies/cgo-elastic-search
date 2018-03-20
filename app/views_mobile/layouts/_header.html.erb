@@ -1,0 +1,33 @@
+<!-- Start Header Section ==================================================-->
+<header>
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12">
+        <!--<a href="index.html"><img src="images/logo.png" alt="Logo" title="Logo"></a>-->
+        <!--<a href="" class="pull-right dropdown_bar"><img src="images/dropdown_bar.png" alt="" title=""></a>-->
+        <%= link_to "#{image_tag('logo.png')}".html_safe, root_url %>
+        <% if params[:controller]!='welcome'%>
+        <nav class="clearfix pull-right">
+          <a href="javascript:void(0)" id="pull"></a>
+          <ul class="clearfix">
+            <li><%= link_to 'Home',root_url %></li>
+            <% if logged_in? %>
+            <li><%= link_to 'My Account', current_user && current_user.has_role?(:applicant) ? edit_applicant_path(current_user.id) : edit_employer_recruiter_path(:employer_id => current_user.employer.id, :id => current_user.id) %></a></li>
+            <% else %>
+            <li><%= link_to 'Create an Account',new_applicant_path %></a></li>
+            <% end %>
+            <% if current_user.nil? || current_user.has_role?(:applicant) %>
+            <li><%= link_to 'Find Jobs', search_jobs_path %></li>
+            <% end %>
+            <li><%= link_to 'View Job Fairs', current_user.nil? || current_user.has_role?(:applicant) ? jobfairs_path : '/employers/job_fairs' %></li>
+            <li><%= link_to 'Career Advice','http://blog.corporategray.com' %></li>
+          </ul>
+        </nav>
+            <% end %>
+        <%= render 'layouts/nav' %>
+        <!--<div class="top_title blue_bg"> Connecting employers with military veterans nationwide!</div>-->
+      </div>
+    </div>
+  </div>
+</header>
+<!-- End Header Section ==================================================-->

@@ -1,0 +1,28 @@
+<% # This is the Search Form Code -%>
+<div class="search-block">
+  <%= form_tag	search_jobs_path, :id =>"search_form", :method => :get do %>
+
+    <div class="control-group">
+      <label class="control-label required">Search by Keyword</label>
+      <div class="controls">
+        <%= text_field_tag "q[keyword]", q[:keyword], :class=>'form-control' %>
+      </div>
+    </div>
+  
+    <div class="control-group">
+      <label class="control-label">
+        Search by Company Name (Optional) <span id="employer-name-indicator" style="display: none"><%= image_tag "dots.gif" -%></span></label>
+        <div class="controls">
+          <%= text_field_with_auto_complete :employer, :name, {:class => 'form-control'}, { :indicator => "employer-name-indicator" } %>
+        </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="applicant_first_name">Filter by State (Optional)</label>
+      <div class="controls">
+        <%=select_tag("q[state][]", options_for_select(options_from_hash(Constants::STATE_APO), q[:state] ), :include_blank => 'None', :class => 'form-control') %>
+      </div>
+    </div>
+    <%= submit_tag 'Search Jobs', :class=>'btn btn-primary' %>
+  <% end %>
+</div>

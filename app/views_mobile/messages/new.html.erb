@@ -1,0 +1,14 @@
+<% content_for :page_title do %>
+Send Message
+<% end %>
+<section>
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="inner_form">
+        <%= render :partial => "/messages/send_message_form.html.erb" , :locals => { :recipient => @recipient.id } -%>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

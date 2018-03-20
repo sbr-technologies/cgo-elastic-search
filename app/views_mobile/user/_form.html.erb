@@ -1,0 +1,68 @@
+<div id="military">
+  <legend>Name and Email</legend>
+  <div class="control-group">
+    <label class="control-label required" for="applicant_first_name">First Name</label>
+    <div class="controls">
+      <%= form.text_field :first_name, :class=>'form-control' %>
+      <%= errors_for @recruiter, :first_name %>
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label required" for="applicant_last_name">Last Name</label>
+    <div class="controls">
+      <%= form.text_field :last_name, :class=>'form-control' %>
+      <%= errors_for @recruiter, :last_name %>
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label required" for="applicant_email">Email</label>
+    <div class="controls">
+      <%= form.text_field :email, :class=>'form-control' -%>
+      <%= errors_for @recruiter, :email %>
+    </div>
+  </div>
+  <div class="control-group">
+      <label class="control-label" for="applicant_willing_to_relocate">Display Your Email to Applicants?</label>
+      <div class="controls">
+      <%= form.check_box :is_display_email, :'data-on-label'=>'Yes', :'data-off-label'=>'No' %>
+      </div>
+  </div>
+</div>
+
+<% unless @social_media_account == true %>
+<div id="other">
+    <legend>Account Login Information</legend>
+    <div>Please enter whatever username and password you desire. (Default username is your email address)</div>
+
+    <div class="control-group">
+      <label class="control-label required" for="applicant_first_name">Username</label>
+      <div class="controls">
+        <%= form.text_field :username, :disabled => !form.object.new_record?, :class=>'form-control' %>
+        <%= errors_for @recruiter, :username %>
+      </div>
+    </div>	
+    <% if @current_user && @current_user.has_role?('admin') %>
+      <div class="control-group">
+        <label class="control-label required" for="applicant_first_name">Role</label>
+        <div class="controls">
+          <%= form.select(:roles, (@valid_roles || User::ROLES).collect{|role| [role.humanize, role]} , {:include_blank => true}, :class=>'form-control')  %>
+          <%= errors_for @recruiter, :roles %>
+        </div>
+      </div>	
+    <% end %>
+    <div class="control-group">
+      <label class="control-label required" for="applicant_first_name">Password</label>
+      <div class="controls">
+        <%= form.password_field :password, :class=>'form-control', :label => "Password (4 to 7 characters required)" %>
+        <%= errors_for @recruiter, :password %>
+      </div>
+    </div>	
+    <div class="control-group">
+      <label class="control-label required" for="applicant_first_name">Confirm password</label>
+      <div class="controls">
+        <%= form.password_field :password_confirmation, :class=>'form-control' %>
+        <%= errors_for @recruiter, :password_confirmation %>
+      </div>
+    </div>
+  </div>
+<% end %>

@@ -1,0 +1,44 @@
+<% content_for :title_tag do %>
+  <%= @job.title.titleize %>
+<% end %>
+
+<% content_for :meta_description do %>
+  This is a search for <%= @job.title -%> by <%= @job.employer.name -%>. Candidates are welcome to apply to this job posting on
+  http://www.corporategray.com 
+<% end %>
+<section>
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="inner_form">
+          <div class="name-area"><label>Job Title:</label><%= @job.title %></div>
+          <div class="name-area"><label>Posted by:</label><%= link_to @job.employer.name, "http://#{@job.employer.website.strip.gsub(/^http:\/\//, '')}", :popup => true %> on <%= @job.updated_at.to_date.to_s(:human) %></div>
+          <div class="name-area"><h3>Description:</h3>
+            <% if @job.input_method == "manual" %>
+              <%= raw @job.description %>
+            <% else %>
+              <%= raw @job.description.gsub(/\n/, "<br/>") %>
+            <% end %>
+          </div>
+          <div class="apply-button-group">
+            <% if current_user %>
+              <% if @job.online_application_url.blank? %>
+              <%= link_to "Apply", apply_job_path(@job.id), :class => "btn btn-primary" %>
+              <% else %>
+              <%= link_to "Apply", @job.online_application_url, :class => "btn btn-primary" %>
+              <% end %>
+              <% if not current_user.inbox_entries.contains?(@job, "Job")%>
+                <%= link_to "Save", add_to_inbox_job_path(@job.id), :remote => true, :class => "btn btn-primary save-job" %>
+              <% else %>
+                <span class="btn btn-default btn-disabled">Already in your Inbox</span>
+              <% end %>
+            <% else %>
+                <%= link_to "Login to Apply", new_session_path , :class => "btn btn-primary"%>
+            <% end %>
+            <span class="ajax_loader"><%=image_tag "/images/dots.gif"-%></span>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

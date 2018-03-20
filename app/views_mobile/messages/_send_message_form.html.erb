@@ -1,0 +1,9 @@
+<p class="title">Send Message:</p>
+  <span class="ajax_loader"><%=image_tag "/images/dots.gif"-%></span>
+  <div class="message-status" style="display: none">Your message has been sent</div>
+  <%= form_for :message, :url => messages_path, :remote => true, :html => {:id => "send-message-form"} do |f| %>
+    <%= f.hidden_field :recipient, :value => ((!recipient.to_s.blank? ? recipient : @recipient) rescue @recipient) -%>
+    <%= f.hidden_field :job_id, :value => (@job_id rescue 'na') -%>
+    <%= f.text_area :body, :size => "70x8", :class=>'form-control' -%>
+      <%= submit_tag 'Send', :class=>'btn btn-primary' %>
+  <% end %>

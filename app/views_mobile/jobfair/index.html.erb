@@ -1,0 +1,128 @@
+<% if(!current_user.nil? && (current_user.has_role?("recruiter") || current_user.has_role?("employer_admin"))) || controller.controller_name == "employer"%>
+
+  <%= content_for :page_title do %>
+    Military Job Fairs and Events
+  <% end %>
+
+  <%= content_for :meta_keywords do %>
+    Job fairs, register, employment, military job fairs, security clearance, military officer job fairs, government jobs, military spouse employment, civilian jobs, military recruitment, recruiters, hiring, interviewing
+  <% end %>
+
+  <%= content_for :meta_description do %>
+    Corporate Gray Job Fairs enable recruiters to screen and evaluate military veterans for company employment.
+  <% end %>
+
+<% else %>
+
+  <%= content_for :page_title do %>
+    Military Job Fairs and Events
+  <% end %>
+  <%= content_for :meta_keywords do %>
+    military transition assistance, veteran employment, military job fairs, security clearance, military officer job fairs, government jobs, military spouse employment, civilian jobs, military recruitment, recruiters, hiring, interviewing
+  <% end %>
+
+  <%= content_for :meta_description do %>
+    Corporate Gray job fairs connect military veterans in career transition with military friendly employers and schools.
+  <% end %>
+
+<% end %>
+<section>
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="inner_form">
+            <div class="instructional-text">
+              <p>The Corporate Gray Job Fairs for the Military Community give you the opportunity to meet face-to-face
+              with military friendly employers. You can also participate in our Virtual Military Job Fairs, which are for 
+              veterans nationwide.</p>
+              <p>Both the in person and virtual events are FREE to all Job Seekers. </p>
+            </div>
+            <% jobfairs = Jobfair.all_upcoming %>
+            <% if jobfairs then %>
+              <div id="jobfair-calendar" class="portlet">
+                <div class="phead">
+                  Job Fair Calendar <%= "#{Time.now.year} - #{Time.now.year + 1}" %> 
+                </div>
+                <div class="pbody">
+                  <table id="jobfair-calendar-blotter">
+                    <thead>
+                      <tr>
+                        <th width="17%">Date</th>
+                        <th width="8%">Type</th>
+                        <th width="38%">Title</th>
+                        <th width="20%">City</th>
+                        <% if (current_user && current_user.has_role?(:recruiter)) || @display_fees %>
+                          <th width="9%">Fee</th>
+                        <% end %>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% jobfairs.each do |jobfair| %>
+                        <tr>
+                          <td>
+                            <%= jobfair.date.to_s(:human) -%>
+                          </td>
+
+                          <td>
+                            <% case jobfair.category 
+                              when "military_friendly" %>
+                              MF 
+                            <% when "virtual" %>
+                              VI 
+                            <% when "military_officer" %>
+                              MO 
+                            <% else  %>
+                              SC  
+                            <% end %>
+                          </td>
+
+                          <td>
+                            <%= link_to jobfair.category.titleize + " Job Fair", jobfair_path(jobfair.id) -%>
+                          </td>
+
+                          <td>
+                            <%= jobfair.city -%>
+                          </td>
+
+                          <% if (current_user && current_user.has_role?(:recruiter)) || controller.request.fullpath.match(/employers\/job_fairs/) %>
+                            <td><%= number_to_currency(jobfair.fees, :precision => 0) -%></td>
+                          <% end %>
+
+                          <td>
+                            <% if current_user %>
+                              <% if !current_user.registered?(jobfair) %>
+                                <% if current_user.is_a?(Recruiter)  %>
+                                  <%= link_to "Register", jobfair.external_registration_url.to_s.strip.blank? ? new_jobfair_registration_path(jobfair.id) : jobfair.external_registration_url, :class=> jobfair.external_registration_url.to_s.strip.blank? ? "action_link" : "external" %>
+                                <% else %>
+                                  <% if jobfair.category == 'military_officer' && (!Constants::TYPE_OF_APPLICANT.select {|x| ['O', 'W'].include?(x[:label][0,1])}.collect {|y| y[:id]}.include?(current_user.type_of_applicant))  %>
+                                    Officers Only 
+                                  <% else %>
+                                    <%= link_to "Register", jobfair.applicant_external_registration_url.to_s.strip.blank? ? new_jobfair_registration_path(jobfair.id) : jobfair.applicant_external_registration_url, :class => jobfair.applicant_external_registration_url.to_s.strip.blank? ? "action_link" : "external" -%>
+                                  <% end %>
+                                <% end %>
+                              <% else %>
+                                <span>Registered</span>
+                              <% end %>
+                            <% else %>
+                              <span><%= link_to "Please Login", new_session_path -%></span>
+                            <% end %>
+                          </td>
+                        </tr>
+                      <% end %>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="legend">
+                  MF: Especially for transitioning and former military personnel. Civilians welcome.<br/>
+                  SC: Only for those job seekers with a Secret or higher security clearance.<br/>
+                  VI: Virtual Career Fair.<br/>
+                  MO: Military Officer only.
+                </div>
+              </div>
+            <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

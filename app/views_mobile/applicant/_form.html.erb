@@ -1,0 +1,150 @@
+<%= form_for @applicant do |f| %>
+<div id="military">
+
+    <legend>Your Name and Military Information</legend>
+
+    <% if current_user && current_user.has_role?('administrator') %>
+      <%= f.check_box :status, {:label => "Active?"}, "active", "inactive" -%>
+    <% end %>
+  
+    <div class="control-group">
+      <label class="control-label required" for="applicant_first_name">First Name</label>
+      <div class="controls">
+        <%= f.text_field :first_name, :class=>'form-control' %>
+        <%= errors_for @applicant, :first_name %>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label required" for="applicant_last_name">Last Name</label>
+      <div class="controls">
+        <%= f.text_field :last_name, :class=>'form-control' %>
+        <%= errors_for @applicant, :last_name %>
+      </div>
+    </div>
+
+
+    <div class="control-group">
+      <label class="control-label required" for="applicant_branch_of_service">Branch Of Service</label>
+      <div class="controls">
+        <%= f.select :branch_of_service, options_from_hash(Constants::BRANCH_OF_SERVICE, {:include_blank => true}), {}, {:class=>'form-control'} %>
+        <%= errors_for @applicant, :branch_of_service %>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label required" for="applicant_type_of_applicant">Rank</label>
+      <div class="controls">
+        <%= f.select :type_of_applicant, options_from_hash(Constants::TYPE_OF_APPLICANT, {:include_blank => true}), {}, {:class=>'form-control'} %>
+        <%= errors_for @applicant, :type_of_applicant %>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label required" for="applicant_security_clearance">Security Clearance</label>
+      <div class="controls">
+        <%= f.select :security_clearance, options_from_hash(Constants::SECURITY_CLEARANCE, {:include_blank => true}), {}, {:class=>'form-control'} %>
+        <%= errors_for @applicant, :security_clearance %>
+      </div>
+    </div>
+
+</div>
+
+<div id="contact">
+    <legend>Contact Information</legend>
+    <div class="control-group">
+      <label class="control-label required" for="applicant_email">Email</label>
+      <div class="controls">
+        <%= f.text_field :email, :class=>'form-control' -%>
+        <%= errors_for @applicant, :email %>
+      </div>
+    </div>
+    <%= render 'address/address_form', :address => @address %>
+</div>
+
+<div id="other">
+    <legend>Employment Information</legend>
+    <div class="control-group">
+      <label class="control-label required" for="applicant_occupational_preference">Occupational Preference</label>
+      <div class="controls">
+        <%= f.select :occupational_preference, options_from_hash(Constants::OCCUPATIONAL_PREFERENCE, {:include_blank => true}), {}, {:class=>'form-control'} %>
+        <%= errors_for @applicant, :occupational_preference %>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label required" for="applicant_education_level">Education Level</label>
+      <div class="controls">
+        <%= f.select :education_level, options_from_hash(Constants::EDUCATION_LEVEL, {:include_blank => true}), {}, {:class=>'form-control'} %>
+        <%= errors_for @applicant, :education_level %>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="applicant_willing_to_relocate">Willing To Relocate</label>
+      <div class="controls">
+    <%= f.check_box :willing_to_relocate, :'data-on-label'=>'Yes', :'data-off-label'=>'No' %>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="applicant_us_citizen">U.S. Citizen</label>
+      <div class="controls">
+    <%= f.check_box :us_citizen, :'data-on-label'=>'Yes', :'data-off-label'=>'No' %>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="applicant_availability_date">Availability Date</label>
+      <div class="controls">
+          <%= f.date_select :availability_date, {:order =>[:month, :year], :prompt => { :month => 'Select Month', :year => 'Select Year' }, :start_year => Time.now.year}, {:class => 'form-control'}  %>
+      </div>
+    </div>
+  </div>
+
+  <div id="demographics">
+    <legend>Optional Demographic Information</legend>
+    <div>The Department of Labor requires Federal contractors to track gender and ethnicity/race data on Internet Applicants. Completion of these two data fields is voluntary.</div>
+    <div class="control-group">
+      <label class="control-label" for="applicant_gender">Gender</label>
+      <div class="controls">
+        <%= f.select :gender, Constants::GENDER, {:include_blank => true}, {:class=>'form-control'} %>
+        <%= errors_for @applicant, :gender %>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="applicant_ethnicity">Ethnicity</label>
+      <div class="controls">
+        <%= f.select :ethnicity, Constants::ETHNICITY, {:include_blank => false}, {:class=>'form-control'} %>
+      </div>
+    </div>
+  </div>
+
+  <div id="login">
+    <legend>Username &amp; Password</legend>
+    <div class="control-group">
+      <label class="control-label required" for="applicant_username">Username</label>
+      <div class="controls">
+        <%= f.text_field :username, :'data-edited'=>false, :disabled=> !f.object.new_record?, :class=>'form-control' %>
+        <%= errors_for @applicant, :username %>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label required" for="applicant_password">Password</label>
+      <div class="controls">
+        <%= f.password_field :password, :class=>'form-control' %>
+        <%= errors_for @applicant, :password %>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label required" for="applicant_password_confirm">Password Confirm</label>
+      <div class="controls">
+        <%= f.password_field :password_confirmation, :class=>'form-control' %>
+        <%= errors_for @applicant, :password_confirmation %>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <%= f.submit @applicant.new_record? ? 'Submit' : 'Save Changes', :class=>'btn btn-primary' %>
+  </div>
+<% end %>
+

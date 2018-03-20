@@ -1,0 +1,27 @@
+<% content_for :page_title, 'Login' %>
+<!-- Start Content Section ==================================================-->
+<section>
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="inner_form">
+            <div class="login-form">
+            <%= form_for :session,:url=>sessions_path do |f| %>
+            <div>
+              <label>Username</label>
+              <%= text_field_tag :username, nil, :class=>'form-control' %>
+            </div>
+            <div>
+              <label>Password</label>
+              <%= password_field_tag :password, nil, :class=>'form-control' %>
+            </div>
+            <%= link_to 'Forgot your password? Click Here', password_reminder_sessions_path %>
+            <%= submit_tag 'Login Now' %>
+            <%= link_to 'Need an Account? Sign Up', new_applicant_path %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

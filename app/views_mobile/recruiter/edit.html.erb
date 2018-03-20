@@ -1,0 +1,23 @@
+<% content_for :page_title do %>
+	Edit <%= @recruiter.name -%>
+<% end %>
+
+<section>
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="inner_form">
+          <% content_for :page_header_links do %>
+            <%= link_to "Cancel", employer_recruiters_path(current_user.employer.id) %>
+          <% end %>
+          <%= form_for @recruiter, 
+            :url => employer_recruiter_path(current_user.employer.id, @recruiter.id),
+            :html => {:id => "recruiterform"} do |f| %>
+            <%= render 'form', :form => f %>
+            <%= f.submit 'Save Changes', :class=>'btn btn-primary' %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

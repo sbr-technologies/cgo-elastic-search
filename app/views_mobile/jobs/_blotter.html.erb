@@ -1,0 +1,9 @@
+<div class="blotter">
+  <ul id="jobs">
+    <%= render :partial =>  @jobs.results  %>
+  </ul>
+</div>
+
+<div id="loading-indicator" style="display: none;">
+  Loading <%= image_tag "dots.gif" %>
+</div>

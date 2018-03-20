@@ -1,0 +1,22 @@
+  <% unless messages.empty? %>
+  <ul>
+    <% messages.group_by {|message| message.created_at.to_date}.sort {|a,b| b[0] <=> a[0]}.each do |m| %>
+    <li>
+      <span class="message-date"><%= relative_date(m[0].to_date).capitalize -%></span>
+      <ul>
+      <% m[1].each do |message| %>
+        <li>
+          <%="#{message.created_at.to_s(:hh_mm)} Message from #{message.sender.name}: " unless message.sender.nil?-%>
+          <%= message.body-%>
+          <span><%= link_to("Reply", new_message_path(:recipient => message.sender.id)) unless message.sender.nil? %></span>
+        <span><%= link_to(message.action, message.action_url) unless message.action.nil? -%></span>
+      </li>
+      <% end %>
+      </ul>
+    </li>
+    <% end %>
+</ul>
+<% else %>
+        <span>No Records found</span>
+<% end %>
+
